@@ -1,5 +1,6 @@
 import java.util.Scanner;
 import java.util.Random;
+import java.util.ArrayList;
 
 class Conversation {
 
@@ -9,17 +10,18 @@ class Conversation {
   public static void main(String[] arguments) {
 
 // creates canned responses 
-    String[] cannedPhrases = {"mmm-hm",
-                                   "Hmm tell me more",
+    String[] responses = {"mmm-hm",
+                                   "Elaborate?",
                                    "of course",
                                    "i see...",
                                    "what?",
                                    "interesting...",
                                    "i dont get it",
                                    "ohhh ok",
-                                   "huh?"
+                                   "huh?",
+                                   "yeah"
                                    };
-        int phrase = cannedPhrases.length;
+        int phrase = responses.length;
 
 //Asks User for name and outputs welcome 
     try (Scanner start = new Scanner(System.in)) {
@@ -31,24 +33,29 @@ class Conversation {
 //Takes in how many rounds
     try (Scanner userInput = new Scanner(System.in)) {
       int rounds = userInput.nextInt();
+      System.out.println(start.nextLine());
 
-// creates set up for transcript
-      start.nextLine();
-      String[] transcriptArray = new String[2 * rounds];
+// creates transcript array and adds previous conversation
+      ArrayList<String> transcript = new ArrayList<String>();
+      transcript.add("Enter your name: " + "\n");
+      transcript.add(name + "\n");
+      transcript.add("Welcome " + name + "! How many rounds would you like:" + "\n");
 
-      transcriptArray[0] = "Awsome, whats on your mind today?";
+      System.out.println("Awsome lets start, whats on your mind today?");
+      transcript.add("Awsome, whats on your mind today?" + "\n");
 
  //Creates a loop for chat
       Random rand = new Random();
-      int index = -1;
 
-      System.out.println(transcriptArray[0]);
       for(int i = 0; i < rounds; i++) {
-        String input = start.nextLine();
-            String[] words = input.split(" ");
+        
+        String input = start.nextLine(); //takes in user input
+            String[] words = input.split(" "); // creates an array for user input
             StringBuilder end = new StringBuilder();
             boolean first = true;
             String mirrored;
+            transcript.add(input + "\n");
+            
  //Determins wether it should output random phrase or mirror phrase
       for (String word : words) {
                 if (first) {
@@ -87,18 +94,22 @@ class Conversation {
                 mirrored = newPhrase;
             }
             else {
-                mirrored = cannedPhrases[rand.nextInt(phrase)];
+                mirrored = responses[rand.nextInt(phrase)];
             }
             System.out.println(mirrored + "?");
-            transcriptArray[++index] = input;
-            transcriptArray[++index] = mirrored;
         }
+        System.out.println("Bye! Hope to see you again soon :)");
+        transcript.add("Bye! Hope to see you again soon :)" + "\n");
+
 // prints transcript        
+        String newTranscript = transcript.toString()
+        .replace(",", "")  
+        .replace("[", "")  
+        .replace("]", "")  
+        .trim();
         System.out.println(" ");
-        System.out.println("Transcript:");
-        for (int i = 0; i < transcriptArray.length; i++) {
-            System.out.println(transcriptArray[i]);
-        }
+        System.out.println("-TRANSCRIPT-");
+       System.out.println(newTranscript);
         System.exit(0);
       }
     }
